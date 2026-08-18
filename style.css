@@ -1,0 +1,82 @@
+/* Fontes personalizadas */
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+/* Fundo da tela inteira */
+.bg-radial-pattern {
+  background: radial-gradient(circle at 50% 50%, #1a261c 0%, #090d0a 100%);
+}
+
+/* Glassmorphism */
+.glass-card {
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Sublinhado Dourado Estilizado */
+.text-underline-gold {
+  position: relative;
+  color: #f3cf7a;
+}
+
+.text-underline-gold::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #c5a059;
+  border-radius: 2px;
+  opacity: 0.7;
+}
+
+/* MODOS DO SISTEMA */
+body.mode-red-alert {
+  background-color: #120505;
+}
+
+body.mode-red-alert .main-dashboard {
+  border-color: #8b0000;
+  box-shadow: 0 0 40px rgba(139, 0, 0, 0.4);
+}
+
+body.mode-stealth {
+  background-color: #050806;
+}
+
+body.mode-stealth .main-dashboard {
+  border-color: #2e3f30;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+}
+
+/* Suporte para rolagem no Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #c5a059 #090d0a;
+}
+
+/* Barra de rolagem personalizada tática (Chrome, Edge e Safari) */
+::-webkit-scrollbar {
+  width: 2px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #090d0a !important;
+  border-left: 1px solid #2e3f30 !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #18221a !important;
+  border: 1px solid rgba(197, 160, 89, 0.4) !important;
+  border-radius: 4px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c5a059 !important;
+  border-color: #c5a059 !important;
+}

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOTT MIT UNS</title>
+  <link rel="icon" href="img/logo.png" type="image/png">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Estilos Personalizados -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#090d0a] text-[#e5e7eb] font-sans min-h-screen flex items-center justify-center p-2 sm:p-6 overflow-x-hidden transition-colors duration-500">
+
+  <!-- Background Temático Suave -->
+  <div class="fixed inset-0 bg-radial-pattern opacity-40 pointer-events-none"></div>
+
+  <!-- CONTAINER DE NOTIFICAÇÕES TÁTICAS (TOAST) -->
+  <div id="tactical-toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- CANVAS PRINCIPAL -->
+  <div id="main-dashboard" class="main-dashboard relative w-full max-w-7xl bg-[#111712]/90 backdrop-blur-2xl border border-[#c5a059]/30 rounded-[2.5rem] p-4 sm:p-8 shadow-2xl overflow-hidden flex flex-col gap-6 transition-all duration-500">
+    
+    <!-- 1. BARRA SUPERIOR (Top Bar) -->
+    <header class="flex flex-wrap items-center justify-between gap-4 z-20">
+      
+      <!-- Busca Tática Funcional -->
+      <div class="relative flex-1 min-w-[200px] max-w-xs">
+        <input type="text" id="tactical-search" placeholder="Varredura de diretrizes..." class="w-full bg-[#18221a] border border-[#2e3f30] text-xs text-[#d1d5db] rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:border-[#c5a059] transition-all placeholder-[#6b7280]">
+        <svg class="w-4 h-4 text-[#8a9a8a] absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+
+      <!-- Logo Central -->
+      <div class="font-cinzel tracking-widest text-[#f5e6c8] font-bold text-lg sm:text-xl flex items-center gap-2">
+        <span id="status-indicator" class="w-3 h-3 rounded-full bg-[#8b0000] inline-block animate-pulse"></span>
+        BERUN // IMPÉRIO
+      </div>
+
+      <!-- Usuário & Status -->
+      <div class="flex items-center gap-3">
+        <button id="mode-toggle" class="bg-[#18221a] hover:bg-[#233023] border border-[#2e3f30] text-xs px-3 py-2 rounded-full flex items-center gap-2 text-[#c5a059] transition shadow-md active:scale-95 cursor-pointer">
+          <span>⚙️ Regulamentos</span>
+        </button>
+        
+        <div class="flex items-center gap-3 bg-[#18221a] border border-[#2e3f30] rounded-full p-1.5 pr-4 shadow-inner">
+          <img src="img/icon.png" alt="Avatar Tático" class="w-8 h-8 rounded-full object-cover border border-[#c5a059] shadow-sm">
+          <div class="text-left leading-tight hidden sm:block">
+            <p class="text-xs font-bold text-[#f5e6c8]">Maj. Mota</p>
+            <p class="text-[10px] text-[#8a9a8a]">Codinome: Diabo do Reno</p>
+          </div>
+        </div>
+
+        <button class="btn-open-contact bg-[#c5a059] hover:bg-[#d4af37] text-[#0f140f] font-bold text-xs px-4 py-2.5 rounded-full transition shadow-lg shadow-[#c5a059]/20 uppercase tracking-wider active:scale-95 cursor-pointer">
+          Convocação
+        </button>
+      </div>
+    </header>
+
+    <!-- CORPO PRINCIPAL -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch z-10 my-auto">
+      
+      <!-- 2. MENU LATERAL FLUTUANTE -->
+      <aside class="lg:col-span-1 flex lg:flex-col justify-between items-center bg-[#18221a]/90 border border-[#2e3f30] p-3 rounded-full shadow-2xl h-auto lg:h-[500px] my-auto backdrop-blur-md z-30">
+        <div class="flex lg:flex-col items-center gap-4">
+          <!-- HQ -->
+          <button class="sidebar-action group relative w-11 h-11 rounded-full bg-gradient-to-br from-[#c5a059] to-[#9a7a3e] text-[#0f140f] flex items-center justify-center font-bold text-xs shadow-lg shadow-[#c5a059]/20 hover:scale-110 transition-all duration-300 cursor-pointer" data-modal="hq">
+            <span class="font-cinzel font-extrabold tracking-tighter">HQ</span>
+            <span class="absolute left-14 bg-[#0e140f] border border-[#c5a059]/60 text-[#f5e6c8] text-[10px] font-bold px-2.5 py-1 rounded-md shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none hidden lg:block z-50">Quartel General Imperial</span>
+          </button>
+          
+          <!-- Habilidades & Mana -->
+          <button class="sidebar-action group relative w-11 h-11 rounded-full bg-[#111712] hover:bg-[#233023] border border-[#2e3f30] hover:border-[#c5a059]/60 text-[#8a9a8a] hover:text-[#c5a059] flex items-center justify-center hover:scale-105 transition-all duration-300 cursor-pointer" data-modal="modal-skills">
+            <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <span class="absolute left-14 bg-[#0e140f] border border-[#c5a059]/60 text-[#f5e6c8] text-[10px] font-bold px-2.5 py-1 rounded-md shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none hidden lg:block z-50">Aptidão Mágica & Orbes</span>
+          </button>
+          
+          <!-- Dossiê & Certificados -->
+          <button class="sidebar-action group relative w-11 h-11 rounded-full bg-[#111712] hover:bg-[#233023] border border-[#2e3f30] hover:border-[#c5a059]/60 text-[#8a9a8a] hover:text-[#c5a059] flex items-center justify-center hover:scale-105 transition-all duration-300 cursor-pointer" data-modal="modal-diplomas">
+            <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <span class="absolute left-14 bg-[#0e140f] border border-[#c5a059]/60 text-[#f5e6c8] text-[10px] font-bold px-2.5 py-1 rounded-md shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none hidden lg:block z-50">Patentes e Ordens Militares</span>
+          </button>
+          
+          <!-- Operações & Sites -->
+          <button class="sidebar-action group relative w-11 h-11 rounded-full bg-[#111712] hover:bg-[#233023] border border-[#2e3f30] hover:border-[#c5a059]/60 text-[#8a9a8a] hover:text-[#c5a059] flex items-center justify-center hover:scale-105 transition-all duration-300 cursor-pointer" data-modal="modal-projects">
+            <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+            <span class="absolute left-14 bg-[#0e140f] border border-[#c5a059]/60 text-[#f5e6c8] text-[10px] font-bold px-2.5 py-1 rounded-md shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none hidden lg:block z-50">Teatros de Operações</span>
+          </button>
+
+          <!-- Cofre Secreto -->
+          <button class="sidebar-action group relative w-11 h-11 rounded-full bg-[#8b0000]/30 hover:bg-[#8b0000] border border-[#8b0000] text-[#f26d6d] hover:text-white flex items-center justify-center hover:scale-105 transition-all duration-300 cursor-pointer" data-modal="modal-vault-auth">
+            <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            <span class="absolute left-14 bg-[#0e140f] border border-[#8b0000] text-[#f26d6d] text-[10px] font-bold px-2.5 py-1 rounded-md shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none hidden lg:block z-50">Arquivos Confidenciais (Tipo-95)</span>
+          </button>
+        </div>
+        
+        <button class="btn-open-contact group relative w-11 h-11 rounded-full bg-[#8b0000]/20 hover:bg-[#8b0000] border border-[#8b0000] text-[#f26d6d] hover:text-white flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer">
+          <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          <span class="absolute left-14 bg-[#0e140f] border border-[#8b0000] text-[#f26d6d] text-[10px] font-bold px-2.5 py-1 rounded-md shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none hidden lg:block z-50">Enviar Relatório ao Alto Comando</span>
+        </button>
+      </aside>
+
+      <!-- 3. ÁREA DE DESTAQUE / SOBRE MIM -->
+      <main id="home" class="lg:col-span-7 flex flex-col justify-between relative min-h-[480px] lg:pl-8">
+        <div class="max-w-md pt-2 z-10">
+          <span class="inline-block px-3 py-1 bg-[#8b0000]/30 border border-[#8b0000] text-[#f26d6d] text-[10px] font-mono font-bold tracking-widest rounded-full uppercase mb-4 shadow-md">★ Gabinete de Engenharia e Logística</span>
+          <h1 class="font-cinzel text-2xl sm:text-4xl lg:text-4xl xl:text-5xl font-black text-[#f5e6c8] leading-tight mb-3">
+            A eficiência suprema e a <span>lógica</span> garantem a vitória total.
+          </h1>
+          <p class="text-xs sm:text-sm text-[#9ca3af] leading-relaxed mb-4">
+            Oficial de Engenharia Mágica e Desenvolvimento Estratégico. Especializada em otimização de recursos, aniquilação de gargalos e obediência absoluta aos regulamentos do Império.
+          </p>
+        </div>
+
+        <div class="absolute right-0 sm:right-10 bottom-0 top-0 w-full sm:w-3/5 pointer-events-none flex items-end justify-center sm:justify-end overflow-hidden z-0">
+          <div class="absolute w-72 h-72 bg-[#c5a059]/10 rounded-full blur-3xl -z-10 bottom-10 right-10"></div>
+          <img src="img/tanya-hero.png" alt="Tanya von Degurechaff" class="h-[85%] sm:h-[95%] max-h-[600px] object-contain object-bottom drop-shadow-[0_20px_35px_rgba(0,0,0,0.95)] filter brightness-95 opacity-30 sm:opacity-90 transition-all duration-500">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 z-10 pt-6">
+          <div class="searchable-card glass-card p-4 rounded-3xl border border-[#2e3f30] bg-[#141c14]/80 backdrop-blur-md hover:border-[#c5a059]/50 transition cursor-pointer">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-[10px] text-[#8a9a8a] font-mono uppercase">Infraestrutura</span>
+              <span class="text-[10px] text-[#c5a059] font-bold">Cadete</span>
+            </div>
+            <h3 class="font-bold text-sm text-[#f5e6c8]">HTML5 & CSS3</h3>
+            <p class="text-[11px] text-[#9ca3af] mt-1">Geometria de Barreiras & Fortificação Runica.</p>
+          </div>
+
+          <div class="searchable-card glass-card p-4 rounded-3xl border border-[#2e3f30] bg-[#141c14]/80 backdrop-blur-md hover:border-[#c5a059]/50 transition cursor-pointer">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-[10px] text-[#8a9a8a] font-mono uppercase">Processamento</span>
+              <span class="text-[10px] text-[#8bf08b] font-bold">Cabo</span>
+            </div>
+            <h3 class="font-bold text-sm text-[#f5e6c8]">JavaScript & Python</h3>
+            <p class="text-[11px] text-[#9ca3af] mt-1">Cálculos de artilharia e orbes de automação.</p>
+          </div>
+
+          <div class="searchable-card glass-card p-4 rounded-3xl border border-[#2e3f30] bg-[#141c14]/80 backdrop-blur-md hover:border-[#c5a059]/50 transition cursor-pointer">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-[10px] text-[#8a9a8a] font-mono uppercase">Mobilidade</span>
+              <span class="text-[10px] text-[#c5a059] font-bold">Tenente</span>
+            </div>
+            <h3 class="font-bold text-sm text-[#f5e6c8]">Flutter</h3>
+            <p class="text-[11px] text-[#9ca3af] mt-1">Deslocamento tático móvel transversal.</p>
+          </div>
+        </div>
+      </main>
+
+      <!-- 4. PAINEL DIREITO -->
+      <aside class="lg:col-span-4 flex flex-col gap-4">
+        <div id="diplomas" class="glass-card p-5 rounded-3xl border border-[#2e3f30] bg-[#141c14]/90 backdrop-blur-md flex-1 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-4 border-b border-[#2e3f30] pb-2">
+              <h2 class="font-cinzel text-sm font-bold text-[#d4af37] uppercase tracking-wider">📜 Credenciais Imperiais</h2>
+              <span class="text-[10px] bg-[#233023] text-[#c5a059] px-2 py-0.5 rounded-full border border-[#3a4e3a]">EXÉRCITO</span>
+            </div>
+            <div class="space-y-3">
+              <div class="diploma-item searchable-card p-3 rounded-2xl bg-[#1a241a]/60 border border-[#2d3e2d] flex items-center justify-between hover:border-[#c5a059]/40 transition cursor-pointer">
+                <div>
+                  <h4 class="text-xs font-bold text-[#f5e6c8]">Engenharia de Fortificação Runica</h4>
+                  <p class="text-[10px] text-[#8a9a8a]">HTML</p>
+                </div>
+              </div>
+              <div class="diploma-item searchable-card p-3 rounded-2xl bg-[#1a241a]/60 border border-[#2d3e2d] flex items-center justify-between hover:border-[#c5a059]/40 transition cursor-pointer">
+                <div>
+                  <h4 class="text-xs font-bold text-[#f5e6c8]">Otimização de Geometria Visual</h4>
+                  <p class="text-[10px] text-[#8a9a8a]">CSS</p>
+                </div>
+              </div>
+              <div class="diploma-item searchable-card p-3 rounded-2xl bg-[#1a241a]/60 border border-[#2d3e2d] flex items-center justify-between hover:border-[#c5a059]/40 transition cursor-pointer">
+                <div>
+                  <h4 class="text-xs font-bold text-[#f5e6c8]">Controle de Fluxo Assíncrono Hostil</h4>
+                  <p class="text-[10px] text-[#8a9a8a]">JavaScript</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button id="download-cv" class="w-full mt-4 bg-[#1e281e] hover:bg-[#2d3e2d] border border-[#c5a059]/40 text-[#c5a059] font-bold text-xs py-2.5 rounded-2xl transition flex items-center justify-center gap-2 active:scale-95 shadow-md cursor-pointer">
+            <span>Requisitar Dossiê Militar (CV)</span>
+          </button>
+        </div>
+
+        <div id="projects" class="glass-card p-5 rounded-3xl border border-[#2e3f30] bg-[#141c14]/90 backdrop-blur-md">
+          <h2 class="font-cinzel text-sm font-bold text-[#d4af37] uppercase tracking-wider mb-3">🌐 Teatros de Operações</h2>
+          <div class="space-y-2">
+            <a href="https://imota2.github.io/APOCALYPSE_UI/" target="_blank" class="searchable-card flex items-center justify-between p-2.5 rounded-xl bg-[#1a241a]/40 hover:bg-[#233023] border border-[#2d3e2d] transition group">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-[#8bf08b]"></span>
+                <span class="text-xs font-bold text-[#e5e7eb] group-hover:text-[#c5a059] transition">APOCALYPSE UI</span>
+              </div>
+              <span class="text-xs text-[#8a9a8a]">Inspecionar ↗</span>
+            </a>
+            <a href="https://imota2.github.io/Seireitei/" target="_blank" class="searchable-card flex items-center justify-between p-2.5 rounded-xl bg-[#1a241a]/40 hover:bg-[#233023] border border-[#2d3e2d] transition group">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-[#8bf08b]"></span>
+                <span class="text-xs font-bold text-[#e5e7eb] group-hover:text-[#c5a059] transition">Seireitei</span>
+              </div>
+              <span class="text-xs text-[#8a9a8a]">Inspecionar ↗</span>
+            </a>
+            <a href="https://imota2.github.io/darcsystem/" target="_blank" class="searchable-card flex items-center justify-between p-2.5 rounded-xl bg-[#1a241a]/40 hover:bg-[#233023] border border-[#2d3e2d] transition group">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-[#8bf08b]"></span>
+                <span class="text-xs font-bold text-[#e5e7eb] group-hover:text-[#c5a059] transition">Darc System</span>
+              </div>
+              <span class="text-xs text-[#8a9a8a]">Inspecionar ↗</span>
+            </a>
+          </div>
+        </div>
+
+        <div id="skills" class="searchable-card glass-card p-4 rounded-3xl border border-[#2e3f30] bg-[#141c14]/90 backdrop-blur-md flex items-center justify-between cursor-pointer hover:border-[#c5a059]/50 transition">
+          <div>
+            <p class="text-[10px] text-[#8a9a8a] font-mono uppercase">Potência do Orbe Tipo-95</p>
+            <p id="skill-counter" class="text-2xl font-black text-[#f5e6c8]">100 <span class="text-xs font-normal text-[#8a9a8a]">/ 100</span></p>
+          </div>
+          <div class="w-24 bg-[#1a241a] h-3 rounded-full overflow-hidden border border-[#2d3e2d]">
+            <div id="skill-bar" class="bg-gradient-to-r from-[#8b0000] to-[#c5a059] h-full w-full transition-all duration-1000"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- MODAL DE HABILIDADES / AFINIDADE ELEMENTAL -->
+  <div id="modal-skills" class="extra-modal fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#141c14] border border-[#c5a059] rounded-3xl p-6 max-w-lg w-full shadow-2xl relative max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-[#2e3f30] pb-3 mb-4">
+        <h3 class="font-cinzel font-bold text-[#f5e6c8] text-base flex items-center gap-2">⚡ <span>Varredura de Afinidade Elemental</span></h3>
+        <button class="close-modal-btn text-[#8a9a8a] hover:text-white text-lg font-bold cursor-pointer">✕</button>
+      </div>
+      <div class="space-y-3 overflow-y-auto pr-1 flex-1">
+        <div class="p-3 bg-[#18221a] rounded-xl border border-[#2e3f30] flex items-center justify-between">
+          <h4 class="text-xs font-bold text-[#f5e6c8]">Compatibilidade Estrutural (HTML5)</h4>
+          <span class="text-xs font-mono font-bold text-[#c5a059] bg-[#233023] px-2 py-1 rounded border border-[#2e3f30]">CADETE</span>
+        </div>
+        <div class="p-3 bg-[#18221a] rounded-xl border border-[#2e3f30] flex items-center justify-between">
+          <h4 class="text-xs font-bold text-[#f5e6c8]">Estilização e Malha Geométrica (CSS3)</h4>
+          <span class="text-xs font-mono font-bold text-[#c5a059] bg-[#233023] px-2 py-1 rounded border border-[#2e3f30]">CADETE</span>
+        </div>
+        <div class="p-3 bg-[#18221a] rounded-xl border border-[#2e3f30] flex items-center justify-between">
+          <h4 class="text-xs font-bold text-[#f5e6c8]">Lógica Assíncrona Dinâmica (JavaScript)</h4>
+          <span class="text-xs font-mono font-bold text-[#c5a059] bg-[#233023] px-2 py-1 rounded border border-[#2e3f30]">CABO</span>
+        </div>
+        <div class="p-3 bg-[#18221a] rounded-xl border border-[#2e3f30] flex items-center justify-between">
+          <h4 class="text-xs font-bold text-[#f5e6c8]">Automação e Algoritmos de Extração (Python)</h4>
+          <span class="text-xs font-mono font-bold text-[#c5a059] bg-[#233023] px-2 py-1 rounded border border-[#2e3f30]">CABO</span>
+        </div>
+        <div class="p-3 bg-[#18221a] rounded-xl border border-[#2e3f30] flex items-center justify-between">
+          <h4 class="text-xs font-bold text-[#f5e6c8]">Engenharia Mobile Transversal (Flutter)</h4>
+          <span class="text-xs font-mono font-bold text-[#c5a059] bg-[#233023] px-2 py-1 rounded border border-[#2e3f30]">TENENTE</span>
+        </div>
+        <div class="p-3 bg-[#111712] rounded-xl border border-[#c5a059]/40 mt-2">
+          <p class="text-[10px] font-mono text-[#9ca3af] leading-relaxed uppercase">Diagnóstico Central: O oficial demonstra expansão acelerada de comprimento de onda. Curva de aprendizado vertical com grande capacidade de absorção de infraestruturas hostis.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE DIPLOMAS / PERMISSÕES -->
+  <div id="modal-diplomas" class="extra-modal fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#141c14] border border-[#c5a059] rounded-3xl p-6 max-w-lg w-full shadow-2xl relative max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-[#2e3f30] pb-3 mb-4">
+        <h3 class="font-cinzel font-bold text-[#f5e6c8] text-base flex items-center gap-2">📜 <span>Credenciais e Patentes do Império</span></h3>
+        <button class="close-modal-btn text-[#8a9a8a] hover:text-white text-lg font-bold cursor-pointer">✕</button>
+      </div>
+      <div class="space-y-2 overflow-y-auto pr-1 flex-1 text-xs text-[#d1d5db]">
+        <div class="p-2.5 bg-[#18221a] rounded-xl border border-[#2e3f30] flex justify-between items-center">
+          <span>Permissão de Combate Estrutural</span>
+          <span class="text-[#c5a059] font-bold">HTML</span>
+        </div>
+        <div class="p-2.5 bg-[#18221a] rounded-xl border border-[#2e3f30] flex justify-between items-center">
+          <span>Permissão de Estilização Avançada</span>
+          <span class="text-[#c5a059] font-bold">CSS</span>
+        </div>
+        <div class="p-2.5 bg-[#18221a] rounded-xl border border-[#2e3f30] flex justify-between items-center">
+          <span>Manuseio de Insanidade Dinâmica</span>
+          <span class="text-[#c5a059] font-bold">JavaScript</span>
+        </div>
+        <div class="p-2.5 bg-[#18221a] rounded-xl border border-[#2e3f30] flex justify-between items-center">
+          <span>Lógica Automatizada de Alto Coeficiente</span>
+          <span class="text-[#c5a059] font-bold">Python</span>
+        </div>
+        <div class="p-2.5 bg-[#18221a] rounded-xl border border-[#2e3f30] flex justify-between items-center">
+          <span>Dialeto Estrangeiro (Fronteiriço)</span>
+          <span class="text-[#c5a059] font-bold">Inglês Intermediário</span>
+        </div>
+          <div class="p-2.5 bg-[#18221a] rounded-xl border border-[#2e3f30] flex justify-between items-center">
+            <span>Serviço de Evacuação e Resgate</span>
+            <span class="text-[#c5a059] font-bold">Socorrista de Campanha (Bombeiro)</span>
+          </div>
+          <div class="p-2.5 bg-[#18221a] rounded-xl border border-[#2e3f30] flex justify-between items-center">
+              <span>Intendência de Suprimentos Operacionais</span>
+              <span class="text-[#c5a059] font-bold">Logística do Estado-Maior</span>
+          </div>
+          <div class="p-2.5 bg-[#18221a] rounded-xl border border-[#2e3f30] flex justify-between items-center">
+            <span>Arquitetura de Simulações de Teatros de Guerra</span>
+            <span class="text-[#c5a059] font-bold">Engenheiro de Simuladores Bélicos</span>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE PROJETOS -->
+  <div id="modal-projects" class="extra-modal fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#141c14] border border-[#c5a059] rounded-3xl p-6 max-w-lg w-full shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-[#2e3f30] pb-3 mb-4">
+        <h3 class="font-cinzel font-bold text-[#f5e6c8] text-base flex items-center gap-2">🌐 <span>Arquivo de Campanhas e Operações</span></h3>
+        <button class="close-modal-btn text-[#8a9a8a] hover:text-white text-lg font-bold cursor-pointer">✕</button>
+      </div>
+      <p class="text-xs text-[#9ca3af] mb-3">Relação detalhada de frentes e sistemas web executados sob ordens diretas.</p>
+      <div class="space-y-2">
+        <a href="https://imota2.github.io/APOCALYPSE_UI/" target="_blank" class="flex items-center justify-between p-2.5 rounded-xl bg-[#18221a] border border-[#2e3f30] hover:border-[#c5a059] transition group">
+          <span class="text-xs font-bold text-[#f5e6c8]">APOCALYPSE UI</span>
+          <span class="text-xs text-[#c5a059]">Acessar ↗</span>
+        </a>
+        <a href="https://imota2.github.io/Seireitei/" target="_blank" class="flex items-center justify-between p-2.5 rounded-xl bg-[#18221a] border border-[#2e3f30] hover:border-[#c5a059] transition group">
+          <span class="text-xs font-bold text-[#f5e6c8]">Seireitei</span>
+          <span class="text-xs text-[#c5a059]">Acessar ↗</span>
+        </a>
+        <a href="https://imota2.github.io/darcsystem/" target="_blank" class="flex items-center justify-between p-2.5 rounded-xl bg-[#18221a] border border-[#2e3f30] hover:border-[#c5a059] transition group">
+          <span class="text-xs font-bold text-[#f5e6c8]">Darc System</span>
+          <span class="text-xs text-[#c5a059]">Acessar ↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE AUTENTICAÇÃO DO COFRE -->
+  <div id="modal-vault-auth" class="extra-modal fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#141c14] border border-[#8b0000] rounded-3xl p-6 max-w-sm w-full shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-[#2e3f30] pb-3 mb-4">
+        <h3 class="font-cinzel font-bold text-[#f26d6d] text-base flex items-center gap-2">🔒 <span>Acesso Restrito do Tipo-95</span></h3>
+        <button class="close-modal-btn text-[#8a9a8a] hover:text-white text-lg font-bold cursor-pointer">✕</button>
+      </div>
+      <form id="vault-form" class="space-y-4">
+        <p class="text-[11px] text-[#9ca3af]">Insira o código de liberação imperial para descriptografar os registros confidenciais.</p>
+        <div>
+          <input type="password" id="vault-password" required placeholder="Chave (ex: 123456)" class="w-full bg-[#18221a] border border-[#2e3f30] text-xs text-[#e5e7eb] rounded-xl p-3 focus:outline-none focus:border-[#8b0000] tracking-widest text-center font-mono">
+        </div>
+        <button type="submit" class="w-full bg-[#8b0000] hover:bg-[#a30000] text-white font-bold text-xs py-3 rounded-xl uppercase tracking-wider transition shadow-lg shadow-[#8b0000]/30 cursor-pointer">
+          Autorizar Descriptografia
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- PAINEL / MODAL DO COFRE DESBLOQUEADO -->
+  <div id="modal-vault-panel" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#141c14] border border-[#c5a059] rounded-3xl p-6 max-w-2xl w-full shadow-2xl relative flex flex-col max-h-[85vh]">
+      <div class="flex items-center justify-between border-b border-[#2e3f30] pb-3 mb-3">
+        <h3 class="font-cinzel font-bold text-[#f5e6c8] text-base flex items-center gap-2">📂 <span>Cofre de Registros Classificados</span></h3>
+        <button id="close-vault-panel" class="text-[#8a9a8a] hover:text-white text-lg font-bold cursor-pointer">✕</button>
+      </div>
+      
+      <!-- BARRA DE NAVEGAÇÃO DE DIRETÓRIOS -->
+      <div class="flex items-center justify-between bg-[#18221a] px-3 py-2.5 rounded-xl border border-[#2e3f30] mb-3">
+        <div class="flex items-center gap-2">
+          <button id="vault-back-btn" class="text-xs text-[#8a9a8a] hover:text-[#f5e6c8] font-bold cursor-pointer hidden flex items-center gap-1"><span>⬅</span> Voltar</button>
+          <span id="vault-path-display" class="text-xs font-mono font-bold text-[#c5a059]">/ (Raiz)</span>
+        </div>
+        <button id="vault-create-folder-btn" class="bg-[#233023] hover:bg-[#2d3e2d] text-[#c5a059] border border-[#c5a059]/40 text-xs px-3 py-1.5 rounded-xl transition cursor-pointer flex items-center gap-1">
+          <span>📁</span> Nova Pasta
+        </button>
+      </div>
+
+      <!-- Lista de Itens (Pastas e Arquivos Dinâmicos) -->
+      <div id="vault-file-list" class="space-y-2 overflow-y-auto pr-1 flex-1 mb-4"></div>
+
+      <!-- Área de Upload de Arquivos e Pastas -->
+      <div class="border-t border-[#2e3f30] pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <!-- Input para Arquivos Soltos -->
+        <input type="file" id="vault-file-input" class="hidden" multiple>
+        <label for="vault-file-input" class="w-full sm:flex-1 bg-[#18221a] hover:bg-[#233023] border border-[#c5a059]/40 text-[#c5a059] text-xs py-3 px-4 rounded-2xl text-center cursor-pointer transition flex items-center justify-center gap-2">
+          <span>📄 Enviar Arquivo(s)</span>
+        </label>
+
+        <!-- Input para Pastas Completas com subpastas -->
+        <input type="file" id="vault-folder-input" class="hidden" webkitdirectory directory multiple>
+        <label for="vault-folder-input" class="w-full sm:flex-1 bg-[#18221a] hover:bg-[#233023] border border-dashed border-[#c5a059]/50 text-[#c5a059] text-xs py-3 px-4 rounded-2xl text-center cursor-pointer transition flex items-center justify-center gap-2">
+          <span>📁 Enviar Pasta com Subpastas</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE TRANSMISSÃO DE ORDEM DE SERVIÇO -->
+<div id="modal-ordem" class="extra-modal fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-[#141c14] border border-[#c5a059] rounded-3xl p-6 max-w-lg w-full shadow-2xl relative flex flex-col">
+    
+    <!-- Cabeçalho -->
+    <div class="flex items-center justify-between border-b border-[#2e3f30] pb-3 mb-4">
+      <h3 class="font-cinzel font-bold text-[#f5e6c8] text-base flex items-center gap-2">✉️ <span>Transmitir Ordem de Serviço</span></h3>
+      <button id="close-ordem-btn" class="text-[#8a9a8a] hover:text-white text-lg font-bold cursor-pointer">✕</button>
+    </div>
+    
+    <!-- Formulário -->
+    <form id="form-ordem" class="space-y-4">
+      <div>
+        <label class="block text-xs text-[#8a9a8a] uppercase tracking-wider mb-1">Autoridade / Comando Solicitante</label>
+        <input type="text" id="autoridade" name="autoridade" required placeholder="Ex: General Zettour" class="w-full bg-[#18221a] border border-[#2e3f30] rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#c5a059]" />
+      </div>
+
+      <!-- SELETOR DE CANAL -->
+      <div>
+        <label class="block text-xs text-[#8a9a8a] uppercase tracking-wider mb-1">Canal de Transmissão Desejado</label>
+        <select id="canal" name="canal" class="w-full bg-[#18221a] border border-[#2e3f30] rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#c5a059] cursor-pointer">
+          <option value="whatsapp">WhatsApp (Canal Direto)</option>
+          <option value="telegram">Telegram (Frequência Segura)</option>
+          <option value="email">E-mail Oficial (Relatório)</option>
+          <option value="discord">Discord (Quartel-General)</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs text-[#8a9a8a] uppercase tracking-wider mb-1">Seu Contato (E-mail, Telefone ou @Usuário)</label>
+        <input type="text" id="contato-remetente" name="contato" required placeholder="Como podemos responder a sua ordem?" class="w-full bg-[#18221a] border border-[#2e3f30] rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#c5a059]" />
+      </div>
+      
+      <div>
+        <label class="block text-xs text-[#8a9a8a] uppercase tracking-wider mb-1">Diretrizes da Missão / Requisitos</label>
+        <textarea id="mensagem" name="mensagem" required rows="3" placeholder="Descreva os parâmetros táticos do sistema..." class="w-full bg-[#18221a] border border-[#2e3f30] rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#c5a059] resize-none"></textarea>
+      </div>
+      
+      <button type="submit" id="btn-enviar" class="w-full bg-[#c5a059] hover:bg-amber-600 text-[#141c14] font-bold py-3 rounded-xl transition duration-200 cursor-pointer text-sm tracking-wider uppercase">
+        Enviar Transmissão Oficial
+      </button>
+    </form>
+
+    <div id="status-envio" class="hidden mt-3 text-center text-xs font-bold text-[#c5a059]"></div>
+  </div>
+</div>
+
+  <!-- JS Externo -->
+  <script src="script.js"></script>
+</body>
+</html>
